@@ -156,14 +156,24 @@
   }
 
   // ─── Consent-gated element visibility ────────────────────────────────────
+  function hideConsentElements() {
+    var categories = ['functionality', 'analytics', 'advertising'];
+    categories.forEach(function (cat) {
+      document.querySelectorAll('[data-cmp-consent="' + cat + '"]').forEach(function (el) {
+        el.style.setProperty('display', 'none', 'important');
+      });
+    });
+  }
+
   function revealConsentElements(state) {
     var categories = ['functionality', 'analytics', 'advertising'];
     categories.forEach(function (cat) {
       document.querySelectorAll('[data-cmp-consent="' + cat + '"]').forEach(function (el) {
         if (state[cat]) {
-          el.style.display = el.getAttribute('data-cmp-display') || 'block';
+          var display = el.getAttribute('data-cmp-display') || 'block';
+          el.style.setProperty('display', display, 'important');
         } else {
-          el.style.display = 'none';
+          el.style.setProperty('display', 'none', 'important');
         }
       });
     });
@@ -301,6 +311,7 @@
     var self = this;
     var cfg = this._cfg;
 
+    hideConsentElements();
     applyTheme(cfg.theme);
 
     var stored = loadConsent(cfg.version);
