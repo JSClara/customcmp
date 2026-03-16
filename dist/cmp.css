@@ -33,12 +33,9 @@ body.cmp-no-scroll {
   overflow: hidden;
 }
 
-/* ── Banner ────────────────────────────────────────────────────────────── */
+/* ── Banner (base) ─────────────────────────────────────────────────────── */
 #cmp-banner {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
   z-index: var(--cmp-z-banner);
   background: var(--cmp-banner-bg);
   color: var(--cmp-banner-text);
@@ -46,20 +43,92 @@ body.cmp-no-scroll {
   font-family: var(--cmp-font);
   font-size: 14px;
   line-height: 1.5;
-  transform: translateY(100%);
   opacity: 0;
   transition: transform var(--cmp-transition), opacity var(--cmp-transition);
+}
+
+
+#cmp-banner.cmp-style-bottom-banner {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  border-radius: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-#cmp-banner.cmp-visible {
+#cmp-banner.cmp-style-bottom-banner.cmp-visible {
+  transform: translateY(0);
+}
+
+#cmp-banner.cmp-style-bottom-banner.cmp-hiding {
+  transform: translateY(100%);
+}
+
+/* ── Banner: left-card ─────────────────────────────────────────────────── */
+#cmp-banner.cmp-style-left-card {
+  bottom: 24px;
+  left: 24px;
+  right: auto;
+  width: 340px;
+  border-radius: var(--cmp-radius);
+  box-shadow: var(--cmp-shadow-modal);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+#cmp-banner.cmp-style-left-card.cmp-visible {
   transform: translateY(0);
   opacity: 1;
 }
 
-#cmp-banner.cmp-hiding {
-  transform: translateY(100%);
+#cmp-banner.cmp-style-left-card.cmp-hiding {
+  transform: translateY(20px);
   opacity: 0;
+}
+
+/* ── Banner: right-card ────────────────────────────────────────────────── */
+#cmp-banner.cmp-style-right-card {
+  bottom: 24px;
+  right: 24px;
+  left: auto;
+  width: 340px;
+  border-radius: var(--cmp-radius);
+  box-shadow: var(--cmp-shadow-modal);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+#cmp-banner.cmp-style-right-card.cmp-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#cmp-banner.cmp-style-right-card.cmp-hiding {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+/* ── Card inner layout ─────────────────────────────────────────────────── */
+#cmp-banner.cmp-style-left-card .cmp-banner-inner,
+#cmp-banner.cmp-style-right-card .cmp-banner-inner {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  padding: 20px;
+}
+
+#cmp-banner.cmp-style-left-card .cmp-banner-actions,
+#cmp-banner.cmp-style-right-card .cmp-banner-actions {
+  flex-direction: column;
+  gap: 8px;
+}
+
+#cmp-banner.cmp-style-left-card .cmp-banner-actions .cmp-btn,
+#cmp-banner.cmp-style-right-card .cmp-banner-actions .cmp-btn {
+  width: 100%;
 }
 
 .cmp-banner-inner {
