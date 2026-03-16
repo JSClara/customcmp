@@ -155,6 +155,22 @@
     });
   }
 
+  // ─── Consent-gated element visibility ────────────────────────────────────
+  function revealConsentElements(state) {
+    var categories = ['functionality', 'analytics', 'advertising'];
+    categories.forEach(function (cat) {
+      if (state[cat]) {
+        document.querySelectorAll('.cmp-show-' + cat).forEach(function (el) {
+          el.style.display = '';
+        });
+      } else {
+        document.querySelectorAll('.cmp-show-' + cat).forEach(function (el) {
+          el.style.display = 'none';
+        });
+      }
+    });
+  }
+
   // ─── Script Activation ────────────────────────────────────────────────────
   var activatedScripts = [];
 
@@ -293,6 +309,7 @@
     if (stored) {
       this._state = stored.categories;
       activateScripts(this._state);
+      revealConsentElements(this._state);
       if (cfg.googleConsentMode) updateGoogleConsent(this._state);
     } else {
       this._showBanner();
@@ -390,6 +407,7 @@
     this._state = state;
     saveConsent(state, this._cfg.version);
     activateScripts(state);
+    revealConsentElements(state);
     if (this._cfg.googleConsentMode) updateGoogleConsent(state);
     this._hideBanner();
 
