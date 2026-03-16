@@ -1,0 +1,436 @@
+/*!
+ * CMP - Cookie Consent Manager Styles
+ * Version: 1.0.0
+ */
+
+/* ── CSS Variables (overridden by JS from config) ─────────────────────── */
+:root {
+  --cmp-banner-bg: #ffffff;
+  --cmp-banner-text: #1f2937;
+  --cmp-primary-bg: #111827;
+  --cmp-primary-text: #ffffff;
+  --cmp-secondary-bg: #e5e7eb;
+  --cmp-secondary-text: #111827;
+  --cmp-link: #2563eb;
+  --cmp-overlay: rgba(0, 0, 0, 0.5);
+  --cmp-toggle-on: #111827;
+  --cmp-toggle-off: #d1d5db;
+
+  /* Fixed design tokens */
+  --cmp-radius: 12px;
+  --cmp-radius-sm: 8px;
+  --cmp-radius-btn: 8px;
+  --cmp-shadow: 0 -2px 24px rgba(0, 0, 0, 0.08), 0 -1px 4px rgba(0, 0, 0, 0.04);
+  --cmp-shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+  --cmp-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --cmp-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --cmp-z-banner: 999998;
+  --cmp-z-modal: 999999;
+}
+
+/* ── No-scroll utility ─────────────────────────────────────────────────── */
+body.cmp-no-scroll {
+  overflow: hidden;
+}
+
+/* ── Banner ────────────────────────────────────────────────────────────── */
+#cmp-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--cmp-z-banner);
+  background: var(--cmp-banner-bg);
+  color: var(--cmp-banner-text);
+  box-shadow: var(--cmp-shadow);
+  font-family: var(--cmp-font);
+  font-size: 14px;
+  line-height: 1.5;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform var(--cmp-transition), opacity var(--cmp-transition);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+#cmp-banner.cmp-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#cmp-banner.cmp-hiding {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.cmp-banner-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cmp-banner-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.cmp-banner-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cmp-banner-text);
+  line-height: 1.3;
+}
+
+.cmp-banner-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cmp-banner-text);
+  opacity: 0.8;
+}
+
+.cmp-banner-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.cmp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 18px;
+  border-radius: var(--cmp-radius-btn);
+  font-family: var(--cmp-font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  transition: opacity 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.cmp-btn:hover {
+  opacity: 0.88;
+}
+
+.cmp-btn:active {
+  transform: scale(0.97);
+}
+
+.cmp-btn:focus-visible {
+  outline: 2px solid var(--cmp-link);
+  outline-offset: 2px;
+}
+
+.cmp-btn-primary {
+  background: var(--cmp-primary-bg);
+  color: var(--cmp-primary-text);
+}
+
+.cmp-btn-secondary {
+  background: var(--cmp-secondary-bg);
+  color: var(--cmp-secondary-text);
+}
+
+.cmp-btn-ghost {
+  background: transparent;
+  color: var(--cmp-banner-text);
+  text-decoration: underline;
+  padding: 9px 4px;
+  opacity: 0.65;
+  font-size: 12px;
+}
+
+.cmp-btn-ghost:hover {
+  opacity: 1;
+}
+
+/* ── Link ──────────────────────────────────────────────────────────────── */
+.cmp-link {
+  color: var(--cmp-link);
+  text-decoration: underline;
+}
+
+.cmp-link:hover {
+  opacity: 0.8;
+}
+
+/* ── Modal Overlay ─────────────────────────────────────────────────────── */
+#cmp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--cmp-z-modal);
+  background: var(--cmp-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--cmp-transition), visibility var(--cmp-transition);
+  font-family: var(--cmp-font);
+}
+
+#cmp-modal-overlay.cmp-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Modal ─────────────────────────────────────────────────────────────── */
+.cmp-modal {
+  background: var(--cmp-banner-bg);
+  color: var(--cmp-banner-text);
+  border-radius: var(--cmp-radius);
+  box-shadow: var(--cmp-shadow-modal);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.96) translateY(8px);
+  transition: transform var(--cmp-transition);
+  overflow: hidden;
+}
+
+#cmp-modal-overlay.cmp-visible .cmp-modal {
+  transform: scale(1) translateY(0);
+}
+
+.cmp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+  flex-shrink: 0;
+}
+
+.cmp-modal-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cmp-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--cmp-banner-text);
+  opacity: 0.45;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: opacity 0.15s;
+  font-family: var(--cmp-font);
+}
+
+.cmp-modal-close:hover {
+  opacity: 0.85;
+}
+
+.cmp-modal-close:focus-visible {
+  outline: 2px solid var(--cmp-link);
+  outline-offset: 2px;
+}
+
+.cmp-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  scrollbar-width: thin;
+}
+
+.cmp-modal-desc {
+  margin: 0 0 20px;
+  font-size: 13px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* ── Categories ────────────────────────────────────────────────────────── */
+.cmp-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cmp-category {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cmp-category:last-child {
+  border-bottom: none;
+}
+
+.cmp-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+
+.cmp-category-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cmp-category-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cmp-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--cmp-banner-text);
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+.cmp-category-desc {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.6;
+  line-height: 1.55;
+  padding-right: 60px;
+}
+
+/* ── Toggle ────────────────────────────────────────────────────────────── */
+.cmp-toggle {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cmp-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cmp-toggle-track {
+  display: block;
+  width: 44px;
+  height: 24px;
+  background: var(--cmp-toggle-off);
+  border-radius: 24px;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.cmp-toggle input:checked + .cmp-toggle-track {
+  background: var(--cmp-toggle-on);
+}
+
+.cmp-toggle input:disabled + .cmp-toggle-track {
+  background: var(--cmp-toggle-on);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cmp-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cmp-toggle input:checked + .cmp-toggle-track .cmp-toggle-thumb {
+  transform: translateX(20px);
+}
+
+.cmp-toggle:focus-within .cmp-toggle-track {
+  outline: 2px solid var(--cmp-link);
+  outline-offset: 2px;
+}
+
+/* ── Modal Footer ──────────────────────────────────────────────────────── */
+.cmp-modal-footer {
+  padding: 16px 24px 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.cmp-modal-footer .cmp-btn-primary:first-child {
+  order: 3;
+}
+
+.cmp-modal-footer .cmp-btn-secondary {
+  order: 2;
+}
+
+.cmp-modal-footer #cmp-modal-save {
+  order: 1;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .cmp-banner-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .cmp-banner-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cmp-banner-actions .cmp-btn {
+    width: 100%;
+    padding: 11px 18px;
+  }
+
+  .cmp-modal-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .cmp-modal-footer .cmp-btn {
+    width: 100%;
+    padding: 11px 18px;
+    order: unset !important;
+  }
+
+  .cmp-category-desc {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .cmp-modal {
+    max-height: 95vh;
+  }
+}
