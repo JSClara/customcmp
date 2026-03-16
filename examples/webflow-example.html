@@ -1,0 +1,199 @@
+<!--
+  ══════════════════════════════════════════════════════════════════════════
+  WEBFLOW CMP INSTALLATION GUIDE
+  ══════════════════════════════════════════════════════════════════════════
+
+  In Webflow, all custom code goes in:
+    Site Settings → Custom Code
+
+  There are two places:
+    • "Head Code"  — runs inside <head> before </head>
+    • "Footer Code" — runs before </body>
+
+  INSTALLATION STEPS:
+  ──────────────────────────────────────────────────────────────────────────
+  1. Go to Webflow Site Settings → Custom Code
+  2. In "Head Code", paste Block A (below)
+  3. In "Footer Code", paste Block B (below)
+  4. Publish your Webflow site
+  5. Add blocked scripts using Webflow's per-page "Before </body>" code,
+     or add them in the global Footer Code block.
+
+  ══════════════════════════════════════════════════════════════════════════
+  BLOCK A — Paste into Webflow HEAD Code
+  ══════════════════════════════════════════════════════════════════════════
+-->
+
+<!-- ════ BLOCK A: Paste into Webflow Site Settings → Custom Code → Head ════
+
+  NOTE: If using Google Consent Mode, include the GCM bootstrap and GTM
+  snippet BEFORE the CMP_CONFIG. See examples/gcm-example.html for the
+  full GCM install order.
+
+  If NOT using Google Consent Mode, start directly with CMP_CONFIG:
+-->
+
+<script>
+  window.CMP_CONFIG = {
+    version: '1',              // Bump this string to force a consent reset
+    googleConsentMode: false,  // Set to true if using Google Consent Mode
+
+    theme: {
+      bannerBackground:          '#ffffff',
+      bannerText:                '#1f2937',
+      primaryButtonBackground:   '#111827',
+      primaryButtonText:         '#ffffff',
+      secondaryButtonBackground: '#f3f4f6',
+      secondaryButtonText:       '#111827',
+      linkColor:                 '#2563eb',
+      overlayBackground:         'rgba(0,0,0,0.5)',
+      toggleActive:              '#111827',
+      toggleInactive:            '#d1d5db',
+    },
+
+    content: {
+      bannerTitle:       'We value your privacy',
+      bannerText:        'We use cookies to improve your experience and analyse how you use our site.',
+      privacyPolicyUrl:  '/privacy-policy',
+      privacyPolicyText: 'Privacy Policy',
+      acceptAllText:     'Accept all',
+      rejectAllText:     'Reject all',
+      manageText:        'Manage preferences',
+      saveText:          'Save preferences',
+      modalTitle:        'Cookie preferences',
+      modalDescription:  'Choose which categories of cookies you allow us to use.',
+      categories: {
+        necessary: {
+          label:       'Strictly necessary',
+          description: 'These cookies are required for the site to function. They cannot be disabled.',
+        },
+        functionality: {
+          label:       'Functionality',
+          description: 'These cookies remember your preferences to provide a better experience.',
+        },
+        analytics: {
+          label:       'Analytics',
+          description: 'These cookies help us understand how visitors interact with the website.',
+        },
+        advertising: {
+          label:       'Advertising',
+          description: 'These cookies are used to deliver relevant ads and measure their performance.',
+        },
+      },
+    },
+
+    selectors: {
+      reopenTrigger: '#cookie-settings',  // Any CSS selector for reopen buttons
+    },
+  };
+</script>
+
+<!--
+  Replace YOUR-USERNAME and YOUR-REPO with your actual GitHub username
+  and repository name. The URL format is:
+  https://YOUR-USERNAME.github.io/YOUR-REPO/dist/cmp.css
+-->
+<link rel="stylesheet" href="https://YOUR-USERNAME.github.io/YOUR-REPO/dist/cmp.css">
+
+<!-- ════ END BLOCK A ════ -->
+
+
+<!-- ════ BLOCK B: Paste into Webflow Site Settings → Custom Code → Footer ════
+
+  Place this at the very END of the Footer Code section.
+  Add your blocked analytics / advertising scripts BEFORE the cmp.js load.
+-->
+
+<!-- Your blocked scripts here, for example: -->
+<script type="text/plain" data-cookie-consent="analytics">
+  // Google Analytics inline init (if not using GTM)
+  // Replace G-XXXXXXXXXX with your Measurement ID
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+
+<script
+  type="text/plain"
+  data-cookie-consent="analytics"
+  src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+  async>
+</script>
+
+<!-- Load the CMP script last in footer -->
+<script src="https://YOUR-USERNAME.github.io/YOUR-REPO/dist/cmp.js"></script>
+
+<!-- ════ END BLOCK B ════ -->
+
+
+<!--
+  ══════════════════════════════════════════════════════════════════════════
+  ADDING A "Cookie settings" BUTTON IN WEBFLOW DESIGNER
+  ══════════════════════════════════════════════════════════════════════════
+
+  Option 1 — Text link in footer:
+    In the Webflow designer, add a Text Link element.
+    Set the URL to "#" and assign the ID "cookie-settings"
+    (in Element Settings panel → ID field).
+    The CMP will automatically bind a click handler to it.
+
+  Option 2 — Button element:
+    Add a Button element. Set its ID to "cookie-settings".
+    The button can be styled however you like in Webflow.
+
+  Option 3 — Multiple triggers:
+    If you want multiple "Cookie settings" links, give them all
+    the same class and update the config selector:
+
+      selectors: {
+        reopenTrigger: '.cookie-settings-btn',
+      }
+
+  ══════════════════════════════════════════════════════════════════════════
+  BLOCKING IFRAMES IN WEBFLOW
+  ══════════════════════════════════════════════════════════════════════════
+
+  Webflow's native embed element supports custom attributes.
+  To block an iframe until consent:
+
+  1. Add an Embed element in Webflow.
+  2. In the embed code, write the iframe WITHOUT a src attribute,
+     but with data-src and data-cookie-consent:
+
+  <iframe
+    data-cookie-consent="functionality"
+    data-src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+    width="560"
+    height="315"
+    frameborder="0"
+    allowfullscreen
+    title="Video title">
+  </iframe>
+
+  The CMP will inject the real src only after the user consents
+  to the "functionality" category.
+
+  ══════════════════════════════════════════════════════════════════════════
+  WEBFLOW + GOOGLE CONSENT MODE v2
+  ══════════════════════════════════════════════════════════════════════════
+
+  If using GTM via Webflow's native integration (Site Settings → Integrations
+  → Google Tag Manager), Webflow inserts the GTM snippet automatically.
+
+  IMPORTANT: In this case you CANNOT use Webflow's native GTM integration
+  alongside Google Consent Mode, because you cannot control what Webflow
+  inserts before the GTM snippet.
+
+  Instead, disable the native GTM integration and paste the full sequence
+  manually in Head Code:
+
+  Head Code order:
+    1. GCM bootstrap (gtag consent default)  ← See snippets/gcm-bootstrap.html
+    2. GTM snippet (manually pasted)
+    3. CMP_CONFIG
+    4. cmp.css link
+
+  Footer Code:
+    5. cmp.js (at the end)
+-->
