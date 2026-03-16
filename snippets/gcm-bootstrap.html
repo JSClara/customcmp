@@ -1,0 +1,35 @@
+<!--
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │  Google Consent Mode v2 — Tiny Bootstrap Snippet                        │
+  │                                                                         │
+  │  PASTE THIS FIRST IN <head>, BEFORE any Google tags (GTM, GA4, Ads).   │
+  │  This sets all consent signals to "denied" before Google scripts load, │
+  │  preventing any data collection until the user has made a choice.       │
+  │                                                                         │
+  │  Order in <head>:                                                       │
+  │    1. This bootstrap snippet  ← HERE                                   │
+  │    2. Google Tag Manager / GA4 snippet                                  │
+  │    3. CMP_CONFIG object                                                 │
+  │    4. cmp.css                                                           │
+  │    5. cmp.js                                                            │
+  └─────────────────────────────────────────────────────────────────────────┘
+-->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+
+  // Set default denied state — must run BEFORE any Google tags load
+  gtag('consent', 'default', {
+    analytics_storage:       'denied',
+    ad_storage:              'denied',
+    ad_user_data:            'denied',
+    ad_personalization:      'denied',
+    functionality_storage:   'denied',
+    personalization_storage: 'denied',
+    wait_for_update:         500        // ms to wait for CMP to signal consent
+  });
+
+  // Enable URL passthrough and ads data redaction while consent is denied
+  gtag('set', 'url_passthrough', true);
+  gtag('set', 'ads_data_redaction', true);
+</script>
