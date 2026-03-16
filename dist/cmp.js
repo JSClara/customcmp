@@ -159,15 +159,13 @@
   function revealConsentElements(state) {
     var categories = ['functionality', 'analytics', 'advertising'];
     categories.forEach(function (cat) {
-      if (state[cat]) {
-        document.querySelectorAll('.cmp-show-' + cat).forEach(function (el) {
-          el.style.display = '';
-        });
-      } else {
-        document.querySelectorAll('.cmp-show-' + cat).forEach(function (el) {
+      document.querySelectorAll('[data-cmp-consent="' + cat + '"]').forEach(function (el) {
+        if (state[cat]) {
+          el.style.display = el.getAttribute('data-cmp-display') || 'block';
+        } else {
           el.style.display = 'none';
-        });
-      }
+        }
+      });
     });
   }
 
