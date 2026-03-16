@@ -59,6 +59,7 @@ body.cmp-no-scroll {
 
 #cmp-banner.cmp-style-bottom-banner.cmp-visible {
   transform: translateY(0);
+  opacity: 1;
 }
 
 #cmp-banner.cmp-style-bottom-banner.cmp-hiding {
