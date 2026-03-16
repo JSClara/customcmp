@@ -58,6 +58,7 @@
     selectors: {
       reopenTrigger: '#cookie-settings',
     },
+    bannerStyle: 'bottom-banner',  // 'bottom-banner' | 'left-card' | 'right-card'
     googleConsentMode: false,
   };
 
@@ -227,6 +228,7 @@
     // Banner
     var banner = document.createElement('div');
     banner.id = 'cmp-banner';
+    banner.classList.add('cmp-style-' + (cfg.bannerStyle || 'bottom-banner'));
     banner.setAttribute('role', 'dialog');
     banner.setAttribute('aria-label', c.bannerTitle);
     banner.innerHTML =
