@@ -301,7 +301,13 @@
       .replace(/"/g, '&quot;');
   }
 
-  // ─── Core CMP ─────────────────────────────────────────────────────────────
+  function showBannerWithTransition(banner) {
+    banner.style.opacity = '0';
+    document.body.appendChild(banner);
+    setTimeout(function () {
+      banner.classList.add('cmp-visible');
+    }, 50);
+  }
   function CMP() {
     this._cfg = mergeDeep(DEFAULT_CONFIG, global.CMP_CONFIG || {});
     this._state = null;
@@ -344,15 +350,8 @@
     this._banner = els.banner;
     this._modal = els.modal;
 
-    document.body.appendChild(this._banner);
+    showBannerWithTransition(this._banner);
     document.body.appendChild(this._modal);
-
-    // Slight delay to allow CSS transition
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        self._banner.classList.add('cmp-visible');
-      });
-    });
 
     this._bindEvents();
   };
@@ -507,14 +506,8 @@
     var els = buildUI(this._cfg);
     this._banner = els.banner;
     this._modal = els.modal;
-    document.body.appendChild(this._banner);
+    showBannerWithTransition(this._banner);
     document.body.appendChild(this._modal);
-    var self = this;
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        self._banner.classList.add('cmp-visible');
-      });
-    });
     this._bindEvents();
   };
 
