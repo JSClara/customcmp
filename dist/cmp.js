@@ -496,20 +496,26 @@
     try { document.cookie = STORAGE_KEY + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; } catch (e) {}
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     this._state = null;
-    if (!this._banner) {
-      var els = buildUI(this._cfg);
-      this._banner = els.banner;
-      this._modal = els.modal;
-      document.body.appendChild(this._banner);
-      document.body.appendChild(this._modal);
-      var self = this;
+
+    // Remove any existing banner and modal from DOM cleanly
+    if (this._banner && this._banner.parentNode) this._banner.parentNode.removeChild(this._banner);
+    if (this._modal && this._modal.parentNode) this._modal.parentNode.removeChild(this._modal);
+    this._banner = null;
+    this._modal = null;
+
+    // Rebuild and show fresh
+    var els = buildUI(this._cfg);
+    this._banner = els.banner;
+    this._modal = els.modal;
+    document.body.appendChild(this._banner);
+    document.body.appendChild(this._modal);
+    var self = this;
+    requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          self._banner.classList.add('cmp-visible');
-        });
+        self._banner.classList.add('cmp-visible');
       });
-      this._bindEvents();
-    }
+    });
+    this._bindEvents();
   };
 
   // ─── Init ─────────────────────────────────────────────────────────────────
