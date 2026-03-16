@@ -302,7 +302,6 @@
   }
 
   function showBannerWithTransition(banner) {
-    banner.style.opacity = '0';
     document.body.appendChild(banner);
     setTimeout(function () {
       banner.classList.add('cmp-visible');
@@ -426,14 +425,13 @@
   };
 
   CMP.prototype._hideBanner = function () {
-    var self = this;
-    if (this._banner) {
-      this._banner.classList.remove('cmp-visible');
-      this._banner.classList.add('cmp-hiding');
+    var banner = this._banner;
+    this._banner = null;
+    if (banner) {
+      banner.classList.remove('cmp-visible');
+      banner.classList.add('cmp-hiding');
       setTimeout(function () {
-        if (self._banner && self._banner.parentNode) {
-          self._banner.parentNode.removeChild(self._banner);
-        }
+        if (banner.parentNode) banner.parentNode.removeChild(banner);
       }, 400);
     }
     this._closeModal();
