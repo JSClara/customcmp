@@ -504,7 +504,11 @@
     var els = buildUI(this._cfg);
     this._banner = els.banner;
     this._modal = els.modal;
-    showBannerWithTransition(this._banner);
+    this._banner.style.opacity = '1';
+    this._banner.style.transform = 'translateY(0)';
+    this._banner.style.visibility = 'visible';
+    this._banner.classList.add('cmp-visible');
+    document.body.appendChild(this._banner);
     document.body.appendChild(this._modal);
     this._bindEvents();
   };
