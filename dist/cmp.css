@@ -429,9 +429,8 @@ body.cmp-no-scroll {
   }
 }
 
-/* ── Consent-gated elements ────────────────────────────────────────────── */
-[data-cmp-consent="functionality"],
-[data-cmp-consent="analytics"],
-[data-cmp-consent="advertising"] {
-  display: none;
+@media (max-width: 420px) {
+  .cmp-modal {
+    max-height: 95vh;
+  }
 }
