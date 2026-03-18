@@ -169,12 +169,21 @@
   function revealConsentElements(state) {
     var categories = ['functionality', 'analytics', 'advertising'];
     categories.forEach(function (cat) {
+      // Show elements gated behind this category
       document.querySelectorAll('[data-cmp-consent="' + cat + '"]').forEach(function (el) {
         if (state[cat]) {
           var display = el.getAttribute('data-cmp-display') || 'block';
           el.style.setProperty('display', display, 'important');
         } else {
           el.style.setProperty('display', 'none', 'important');
+        }
+      });
+      // Hide elements marked to hide once consent granted
+      document.querySelectorAll('[data-cmp-hide="' + cat + '"]').forEach(function (el) {
+        if (state[cat]) {
+          el.style.setProperty('display', 'none', 'important');
+        } else {
+          el.style.removeProperty('display');
         }
       });
     });
