@@ -253,11 +253,13 @@
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-label', c.modalTitle);
 
-    var togglesHtml = CATEGORIES.filter(function (cat) {
-      if (cat === 'necessary') return true;
-      if (!cfg.categories) return true;
-      return cfg.categories.indexOf(cat) !== -1;
-    }).map(function (cat) {
+    var activeCategories = cfg.categories
+      ? CATEGORIES.filter(function (cat) {
+          return cat === 'necessary' || cfg.categories.indexOf(cat) !== -1;
+        })
+      : CATEGORIES;
+
+    var togglesHtml = activeCategories.map(function (cat) {
       var info = cats[cat] || { label: cat, description: '' };
       var isNecessary = cat === 'necessary';
       return (
@@ -397,12 +399,22 @@
   };
 
   CMP.prototype._accept = function () {
-    var state = { necessary: true, functionality: true, analytics: true, advertising: true };
+    var cfg = this._cfg;
+    var activeCategories = cfg.categories || CATEGORIES;
+    var state = { necessary: true };
+    activeCategories.forEach(function (cat) {
+      if (cat !== 'necessary') state[cat] = true;
+    });
     this._persist(state);
   };
 
   CMP.prototype._reject = function () {
-    var state = { necessary: true, functionality: false, analytics: false, advertising: false };
+    var cfg = this._cfg;
+    var activeCategories = cfg.categories || CATEGORIES;
+    var state = { necessary: true };
+    activeCategories.forEach(function (cat) {
+      if (cat !== 'necessary') state[cat] = false;
+    });
     this._persist(state);
   };
 
