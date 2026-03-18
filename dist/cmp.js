@@ -253,7 +253,11 @@
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-label', c.modalTitle);
 
-    var togglesHtml = CATEGORIES.map(function (cat) {
+    var togglesHtml = CATEGORIES.filter(function (cat) {
+      if (cat === 'necessary') return true;
+      if (!cfg.categories) return true;
+      return cfg.categories.indexOf(cat) !== -1;
+    }).map(function (cat) {
       var info = cats[cat] || { label: cat, description: '' };
       var isNecessary = cat === 'necessary';
       return (
